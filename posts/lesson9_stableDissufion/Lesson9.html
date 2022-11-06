@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Rekil Prashanth">
+<meta name="dcterms.date" content="2023-03-10">
+
+<title>rekilblog - A different way to look at Stable Diffusion</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rekilblog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">A different way to look at Stable Diffusion</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Fastai 2022 part 2</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Rekil Prashanth </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 10, 2023</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-magic-function" id="toc-the-magic-function" class="nav-link active" data-scroll-target="#the-magic-function">The magic function</a></li>
+  <li><a href="#building-blocks-of-stable-diffusion" id="toc-building-blocks-of-stable-diffusion" class="nav-link" data-scroll-target="#building-blocks-of-stable-diffusion">Building blocks of stable diffusion</a>
+  <ul class="collapse">
+  <li><a href="#unet" id="toc-unet" class="nav-link" data-scroll-target="#unet">1) UNET</a></li>
+  <li><a href="#vae---variational-autoencoders" id="toc-vae---variational-autoencoders" class="nav-link" data-scroll-target="#vae---variational-autoencoders">2)VAE - Variational autoencoders</a></li>
+  <li><a href="#clip" id="toc-clip" class="nav-link" data-scroll-target="#clip">3)CLIP</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>These are the notes from Lesson 9 of fastai part 2, which is not yet public (may be public by Dec 2022)</p>
+<p>The way stable diffusion is normally explained is focused heavily on a particular mathematical derivation. We’ve been developing a totally new way of thinking about stable diffusion and that is what we’ll be seeing. It’s mathematically equivalent to the approach you’ll see in other places but what you’ll realize is that this is actually conceptually much simpler and also later in this course we’ll be showing you some really innovative directions that this can take you when you think of it in this brand new way. I’m expressing it in a different way and it’s equally mathematically valid.</p>
+<section id="the-magic-function" class="level2">
+<h2 class="anchored" data-anchor-id="the-magic-function">The magic function</h2>
+<p>Let’s imagine that we are trying to get something to generate handwritten digits ie stable diffusion for handwritten digits. How do we go about it?</p>
+<p>We’re going to start by assuming there’s some function or API(black box for now,f- magic function), that takes in a handwritten digit and spits out the probability of it being a handwritten digit. For example we pass in an image X1 and it spits back p(X1) = 0.98 ie probability that X1 is a handwritten digit, X1 corresponds to the digit 3 in the figure below</p>
+<p><img src="func.png" width="800"></p>
+<p>Why is this magic function interesting ? We can use this magic function to actually generate handwritten digits.</p>
+<p>Image X3 in the figure doesn’t look like a digit. Let’s see how we could try to convert it into a handwritten digit. It is a 28x28 image with 784 pixels.</p>
+<p><img src="X3.png" width="200"></p>
+<p>So let’s slightly alter each of the pixels, and each time we alter a pixel we pass it to the magic function and see how the probability changes. We want to make changes to the image with the hope that the probability value of it being a handwritten digit increases.</p>
+<p><img src="X3updated.png" width="800"></p>
+<p>Let’s look at a specific example,image X3. Handwritten digits don’t normally have any pixels that are black in the very bottom edge(red box), so if we made it a little bit lighter and passed it through our magic function the probability would probably go up a tiny bit(say 0.02 to 0.023).</p>
+<p>So we could do that for every single pixel of the 28x28 image one at a time. We want to find out which pixels we should be making a little bit lighter and which pixels we should be making a little bit darker to make the image look more like a handwritten digit.</p>
+<p>Putting this mathematically - we want the gradient of the probability that X3 is a handwritten digit with respect to the pixels of X3</p>
+<p><img src="grad.png" width="200"></p>
+<p>Note: We didn’t say <span class="math inline">\(∂ p(X3)/ ∂ X3\)</span> which you might be familiar with and the reason for that is that we’ve calculated this <span class="math inline">\(∂ p(X3)/ ∂ X3\)</span> for every single pixel and so when you do it for lots of different inputs you have to turn the ∂ into a ∇ del or a <a href="https://en.wikipedia.org/wiki/Del">nabla</a>.</p>
+<p>So this means that this <span class="math inline">\(∇p(X3)/ ∇ X3\)</span> has 784 values (28x28 image). They tell us how we can change X3 to make it look more like a digit. We can now change the pixels according to this gradient and this is a lot like what we do when we train neural networks. Except instead of changing the weights in a model we’re changing the inputs to the model i.e.&nbsp;the image pixels. So we’re going to take every pixel and subtract a little bit of its gradient (c * gradient, where c can be thought of as a learning rate) to get a new image,X3′, which looks slightly more like a handwritten digit than before.</p>
+<p><img src="update.png" width="800"></p>
+<p>So now we can pass this new updated image(X3′) through our magic function to calculate a new score and repeat this process.</p>
+<p>So if we have this magic function we can use it to turn any noisy input into something that looks like a handwritten digit(something with a high probability score). Key thing to remember: as I change the input pixels I get back a probability score that tells me if this image is a handwritten digit.</p>
+<p>So if we do this by changing each pixel one at a time to calculate a derivative i.e.&nbsp;finite differencing method of calculating derivatives is very slow. Luckily we can use f.backward() and then X3.grad will have the same thing but all in one go by using the analytic derivatives. So now if we have f.backward() and X3.grad we really don’t need the magic function, f.&nbsp;</p>
+<p>We can now multiply the gradient by a small constant c and subtract it from the pixels, we’ll do it a few times so that we get larger and larger probabilities of this being a handwritten digit.</p>
+<p>So this magic function will be our neural network which we train to tell us which pixels to change to make an image look more like a handwritten digit.</p>
+<p>So next we need some training data. We create this data by using real handwritten digits and then just chucking random noise on top of it. it’s a little bit awkward for us to come up with an exact score which can tell us how much these noisy images are like a handwritten digit so instead let’s predict how much noise was added. This slightly noisy number seven(in the figure below) is actually equal to the original number seven plus some noise.</p>
+<p><img src="noise.png" width="400"></p>
+<p>So we generate this data and then rather than trying to come up with the arbitrary probability of predicting how much of a handwritten digit it is we say the amount of noise tells us how much like a digit it is. So something with no noise is very much like a digit(digit 9 in the figure above) and something with lots of noise isn’t much like a digit at all(digit 6 in the figure above) .</p>
+<p><img src="nn.png" width="600"></p>
+<p>So let’s create a neural net for which we need:</p>
+<ul>
+<li>Inputs -noisy digits<br>
+</li>
+<li>Outputs - noise<br>
+</li>
+<li>loss function - MSE, between the predicted output(noise) and the actual noise</li>
+</ul>
+<p>With this we have the ability to know how much do we have to change a pixel by to make it look more like a digit, this is exactly what we wanted - <span class="math inline">\(∇p(X3)/ ∇ X3\)</span> So once we train the neural net we can pass it an image (random noise) and it’s going to spit out information saying which part of that image it think’s is noise and it’s going to leave behind the bits that look the most like a digit but it won’t do this in one step. It will do this iteratively, we’ll see why later.</p>
+<p><img src="nn_.png" width="300"></p>
+<p>So we can repeat this again and again and you can see now why we are doing this multiple times</p>
+</section>
+<section id="building-blocks-of-stable-diffusion" class="level2">
+<h2 class="anchored" data-anchor-id="building-blocks-of-stable-diffusion">Building blocks of stable diffusion</h2>
+<p>So now with this groundwork laid lets see the building blocks of stable diffusion</p>
+<section id="unet" class="level3">
+<h3 class="anchored" data-anchor-id="unet">1) UNET</h3>
+<p><img src="unet.png" width="600"></p>
+<p>Let’s look at the input and output of the <a href="https://arxiv.org/abs/1505.04597">Unet</a>.</p>
+<ul>
+<li>Input - somewhat noisy image, it could be no noisy at all or it could be all noise<br>
+</li>
+<li>Output - noise<br>
+So if we subtract the output from the input we end up with an approximation of the unnoisy image</li>
+</ul>
+<p>So our handwritten input image is 28x28, but in reality we would want to generate bigger images. Currently, these models work with 512x512x3 images. So for training this model we use millions of noisy versions of these 512x512x3 images. It is going to take a long time to train it. How can we make this faster? Do we really need to store each and every pixel value? We know pixel values don’t change much locally. Can we use this insight? For example a JPEG picture is far fewer bytes than the number of bytes you would get if you multiplied its height by its width by its channels. So the idea is to use compression.</p>
+</section>
+<section id="vae---variational-autoencoders" class="level3">
+<h3 class="anchored" data-anchor-id="vae---variational-autoencoders">2)VAE - Variational autoencoders</h3>
+<p>So let’s see how to compress it with an autoencoder(AE).</p>
+<p><strong>Architecture of an autoencoder</strong><br>
+At each level we will double the number of channels and use a stride two convolution and at the end we add a few resnet like blocks to squish down the number of channels from 24 to 4.</p>
+<p><img src="encoder.png" width="800"></p>
+<p>So we started with a 512x512x3 image and we have a representation of this image which has a size of 64x64x4, we have compressed it by a factor of 48. This representation is called latents. What we just saw is an encoder, We are encoding the “big” image to a much “smaller” representation. This factor of compression makes sense depending on how well we can reconstruct the original image back from these latents of size 64x64x4. So let’s build the inverse process to decode these latents, decoder. And then we can put the encoder and decoder together and train it.</p>
+<p><img src="ae_train.png" width="800"></p>
+<p>We can use MSE and train this, in the beginning we will get random outputs but later we should get close to our input</p>
+<p><img src="ae.png" width="800"></p>
+<p>So what is the point of a model that spits back an output that is identical to the input?</p>
+<p><img src="enc_dec.png" width="800"></p>
+<p>The green bit(when we go from a larger image to a smaller representation) is the encoder and the red bit is the decoder. Say I want to send an image to someone, I could pass it through the encoder and I’ve now got something that’s 48 times smaller than my original picture. The person who receives this can pass it through the decoder(he has a copy of the trained decoder) to get back the original image. This is basically a compression algorithm.</p>
+<p>So how can we use this compression algorithm?<br>
+We can pass these “smaller” latents as the input to the Unet instead of passing the “bigger” original images.</p>
+<p>So let us update the inputs and outputs of the Unet:</p>
+<ul>
+<li>Input - somewhat noisy latents<br>
+</li>
+<li>Output - noise</li>
+</ul>
+<p>Now we can subtract the output from the input to get the denoised latents and pass it to the decoder of theautoencoder to get the best approximation of the denoised version of the image.</p>
+<p>This autoencoder in practice is a Variational Autoencoder.</p>
+<p>So let’s recap what we have done so far. We started with a 512x512x3 image, passed it through the VAE’s encoder to get a compressed version of size 64x64x4. These latents are then passed through the unet which predicts the noise. We can subtract this noise from the encoder’s latents to get denoised latents. These denosied latents are passed through the decoder of the VAE to generate an image of size 512x512x3.</p>
+<p>Few points to keep in mind:</p>
+<ol type="1">
+<li>The VAE is an optional building block. It has the advantage of training the Unet with smaller size latents rather than images, so it’s faster.</li>
+<li>The encoder of the VAE is only required during training and not during inference.</li>
+</ol>
+</section>
+<section id="clip" class="level3">
+<h3 class="anchored" data-anchor-id="clip">3)CLIP</h3>
+<p>So next let’s see how the text prompts play a role. Rather than just feeding in noise and getting back some digit, can we ask it to generate a specific number, say “3”.</p>
+<p><img src="classifier.png" width="400"></p>
+<p>To achieve this, in addition to passing in the noisy input image, let’s also pass in a one hot encoded version of the digit “3”.</p>
+<p><img src="classifier1.png" width="800"></p>
+<p>So we’re now passing two things into this model, the image pixels and what digit it is in one hot encoded vector form. So the model is going to learn how to predict what the noise is and since it has this extra information of what the original digit was, we can expect this model to be better at predicting noise than the previous one.</p>
+<p>After the model has been trained, if we feed in “3”(one hot encoded vector) and the noise, it is going to say the noise is everything that doesn’t represent the number three. So this is called guidance. We can use that guidance to guide the model as to what image we want it to create.</p>
+<p>Is one hot encoded vector the best way though? Say we want to create an image from the phrase - “a cute teddy”. If we were to use 1- hot encoded vectors then we have to create a 1-hot encoded vector for every phrase, which seems very inefficient.</p>
+<p>We’ll create a model that can use the phrase -”a cute teddy” as an input and can output a vector of numbers,embeddings, that in some way represents what “cute teddies” look like.</p>
+<p>So we can gather images from the internet and if they have alt tags they will have some description of the image i.e.&nbsp;a text associated with that image.</p>
+<p><img src="input_clip.png" width="800"></p>
+<p>Now we can create two models, one model which is a text encoder and one model which is an image encoder.</p>
+<p><img src="clip.png" width="800"></p>
+<p>So we can pass the image to the image encoder and text to the text encoder and they will each give us two embeddings.</p>
+<p>Now when we pass the image of the swan, through our image model we would like it to return embeddings which are similar to the embeddings that we get when we pass the text “the graceful swan” through the text encoder. In other words we want their embeddings to be similar. How do we tell our model to do this? We can use dot product to check for similarity between the embeddings. Higher the dot product more similar are the embeddings.</p>
+<p><img src="dot.png" width="600"></p>
+<p>So now we have a grid of images and text, each combination of their embeddings will give us a score when we take their dot product. We want the dot product for only the matching image-text pairs to be high(blue,diagonal element) and similarly we want the non matching pairs of text and image to be small(red, off diagonal elements)</p>
+<p><img src="clip1.png" width="400"></p>
+<p>So our loss function can be defined as adding all the diagonal elements and subtracting from it the off-diagonal elements.</p>
+<p><img src="loss_clip.png" width="400"></p>
+<p>If we want this loss function to be good then we’re going to need the weights of our model for the text encoder to spit out embeddings that are very similar to the image embeddings that they’re paired with and not similar to the embedding of the images they are not paired with.</p>
+<p>Now we can feed our text encoder with “a graceful swan”, “some beautiful swan”, “such a lovely swan” and these should all give very similar embeddings because these would all represent very similar images of swans.</p>
+<p>We’ve successfully created two models that put text and images into the same space, a multimodal(using more than one mode-images and text) model.</p>
+<p>So we took this detour because creating 1-hot encoded vectors for all the possible phrases was impractical. We can can now take our phrase - “a cute teddy bear” and feed it in text encoder to get out some features/embeddings.</p>
+<p><img src="clip2.png" width="800"></p>
+<p>These features are what we will use as guides instead of the 1- hot encoded vectors when we train our Unet. So we pass the phrase - “a cute teddy’ to our text encoder, which will generate embeddings which is going to be used as a guide by our model to turn the input noisy image into something that is similar to things that it’s previously seen that are “cute teddies”</p>
+<p>This pair of models have a name - CLIP,Contrastive Language-Image Pre-training and the loss we are using is called contrastive loss.</p>
+<p>Let us see what all building blocks we have so far.</p>
+<p><img src="summ.png" width="400"></p>
+<ul>
+<li>we’ve got a Unet that can denoise latents into unnoisy latents</li>
+<li>we’ve got the decoder of VAE that can take latents and create an image</li>
+<li>we’ve got the CLIP text encoder which can guide the Unet with captions</li>
+</ul>
+<p>Stable diffusion is a latent diffusion model and what that means is that it doesn’t operate in the pixel space, it operates on in the latent space of some other autoencoder model and in this case that is a variational autoencoder.</p>
+<p><strong>Some jargon:</strong></p>
+<ul>
+<li>score function</li>
+<li>time-steps.</li>
+</ul>
+<p><img src="score.png" width="800"></p>
+<p>These gradients that we have are often called the score function.</p>
+<p>“Time steps” is the jargon used in a lot of papers but we never used any time steps during our training. This is basically an overhang from how the math was formulated in the initial papers. We will avoid using the term time steps but we can see what time steps are though it’s got nothing to do with time in real life.</p>
+<p>We added varying levels of noise to our images, some were very noisy, some were not noisy at all, some had no noise and some would have been pure noise.</p>
+<p>Let’s create a noising schedule,which is a monotonically decreasing function. Where say the x-axis(“t”) varies from one to a thousand. Now we randomly pick a number between one and thousand, we look up in the noise schedule and return the sigma(or beta is what you’ll see in papers). Say we happen to pick the number four, we would look up to find a value on the y-axis which is the sigma, the amount of noise to add to your image if you randomly picked a four.</p>
+<p><img src="noise_Sched.png" width="400"></p>
+<p>If you randomly pick one you’re going to have a lot of noise and if you pick a 1000 you’re going to have hardly any noise.</p>
+<p>So when we are training we need to pick some random amount of noise for every image. One way to get the random noise is to pick a random number between one to a thousand, look it up on this noise scheduler function and that will tell us the sigma of the noise to be added.</p>
+<p>People refer to this t as the time step, nowadays you don’t really have to look up in the noise scheduler. A lot of people are starting to get rid of this idea altogether and some people instead will simply say how much noise was there.</p>
+<p>So each time you create a mini batch during training, you randomly pick a batch of images from your training set, you randomly pick either an amount of noise or you randomly pick a t and then look up the amount of noise and then use that amount of noise to create the noisy images. Then you pass that mini batch into your model to train it and that trains the weights in your model so it can learn to predict noise.</p>
+<p><img src="batch.png" width="400"></p>
+<p>How exactly do we do this inference process ? When you’re generating a picture from pure noise, this corresponds to t=0 on the noise scheduler where you have maximum noise. So you want it to learn to remove noise but if you do this in one step you’ll end up with bad images.</p>
+<p><img src="step1.png" width="400"></p>
+<p>So in practice we get the prediction of the noise and then we multiply it by some constant,c, which is like a learning rate but here we’re not updating weights now we’re updating pixels and we subtract it from the original noisy pixels. So it doesn’t actually predict the final denoised image, all it does is remove some small factor of the noise to give us a slightly denoised image.</p>
+<p>The reason we don’t jump all the way to the final image is because things that look like the image we got by using t=1 (crappy image) never appeared in our training set(does this mean we never train with highly noised images??) and so since it never appeared in our training set our model has no idea what to do with it. Our model only knows how to deal with things that look like somewhat noisy latents and so that’s why we subtract just a small factor of the noise so that we still have a somewhat noisy latent for this process to repeat a bunch of times.</p>
+<p>The questions of what c to use and how do we go from the prediction of noise to what we subtract are the kind of the things that you decide in the actual diffusion sampler. The sampler is used to both add the noise and how to subtract the noise</p>
+<p>This looks a lot like deep learning optimizers. If you change the same parameters by a similar amount multiple times in multiple steps maybe you should increase the amount you change them, this concept is something we call Momentum. We even have better ways of doing that where we say well what happens as the variance changes. Maybe we can look at that as well and that gives us something called Adam and these are types of optimizers. All diffusion-based models came from a very different world of math, which is the world of differential equations. There are a lot of parallel concepts in these two worlds. Differential equations is all about how to take bigger steps instead of taking smaller steps so we can converge quicker. Differential equation solvers use a lot of the same kind of ideas as optimizers, if you squint. One thing that differential equations solvers do which is that they tend to take t as an input and in fact pretty much all diffusion models do that too, we hadn’t spoken about that.</p>
+<p><img src="t.png" width="600"></p>
+<p>Pretty much all diffusion models don’t just take the input pixels and the caption, they also take t. And the idea is that the model will be better at removing the noise if you tell it how much noise there is and remember t is related to how much noise there is.</p>
+<p>Jeremy very strongly suspects that this premise is incorrect because for a fancy neural net figuring out how noisy something is very simple. So when you don’t need to pass in t things stop looking like differential equations and they start looking more like optimizers</p>
+<p>We could swap MSE with perceptual loss. All these things suddenly become possible when we start thinking of this as an optimization problem rather than a differential equation solving problem</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
