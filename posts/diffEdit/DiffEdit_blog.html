@@ -226,7 +226,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <p>We’ll be looking at the <a href="https://arxiv.org/abs/2210.11427">DiffEdit</a> paper and implement it with Stable Diffusion.<br>
-DiffEdit uses test-conditioned diffusion models to automatically generate semantic maps. This means that instead of generating the mask(semantic maps) manually we can generate them by only providing a text prompt of what we want to edit. Let’s look at an image from the paper to understand what this means. <img src="1intro.png" width="800"><br>
+DiffEdit uses test-conditioned diffusion models to automatically generate semantic maps. This means that instead of generating the mask(semantic maps) manually we can generate them by only providing a text prompt of what we want to edit. Let’s look at an image from the paper to understand what this means.</p>
+<p><img src="1intro.png" width="800"><br>
 Given the input image and <code>query</code> text - “A bowl of pears” we want to modify the input image to reflect this query while not modifying the rest of the image.</p>
 <p>We can see from the output image, “Masked Diffusion”, the bowl, table, background wall are all intact and only the contents of the bowl have changed, reflecting our <code>query</code> - “A bowl of pears”.</p>
 <p>So our input image got modified to the output image based on the <code>query</code> while keeping the rest of the image unchanged.<br>
