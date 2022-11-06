@@ -2,8 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/diffEdit/DiffEdit_blog.html",
-      "/posts/lesson9_stableDissufion/Lesson9.html"
+      "/posts/lesson9_stableDissufion/Lesson9.html",
+      "/posts/diffEdit/DiffEdit_blog.html"
     ]
   }
 ]
