@@ -4,7 +4,7 @@
     "href": "posts/lesson9_stableDissufion/Lesson9.html",
     "title": "A different way to look at Stable Diffusion",
     "section": "",
-    "text": "These are the notes from Lesson 9 of fastai part 2, which is not yet public (may be public by Dec 2022)\nThe way stable diffusion is normally explained is focused heavily on a particular mathematical derivation. We’ve been developing a totally new way of thinking about stable diffusion and that is what we’ll be seeing. It’s mathematically equivalent to the approach you’ll see in other places but what you’ll realize is that this is actually conceptually much simpler and also later in this course we’ll be showing you some really innovative directions that this can take you when you think of it in this brand new way. I’m expressing it in a different way and it’s equally mathematically valid."
+    "text": "These are the notes from Lesson 9 of fastai 2022 part 2, we look at Stable Diffusion\nThe way stable diffusion is normally explained is focused heavily on a particular mathematical derivation. We’ve been developing a totally new way of thinking about stable diffusion and that is what we’ll be seeing. It’s mathematically equivalent to the approach you’ll see in other places but what you’ll realize is that this is actually conceptually much simpler and also later in this course we’ll be showing you some really innovative directions that this can take you when you think of it in this brand new way. I’m expressing it in a different way and it’s equally mathematically valid."
   },
   {
     "objectID": "posts/lesson9_stableDissufion/Lesson9.html#the-magic-function",
